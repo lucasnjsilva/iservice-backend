@@ -4,8 +4,6 @@ import { column, beforeSave, BaseModel, beforeCreate } from '@ioc:Adonis/Lucid/O
 import { v4 as uuidv4 } from 'uuid';
 
 export default class Customer extends BaseModel {
-  public static primaryKey = 'uuid';
-
   @column({ isPrimary: true })
   public id: string;
 
@@ -16,6 +14,12 @@ export default class Customer extends BaseModel {
   public password: string;
 
   @column()
+  public name: string;
+
+  @column()
+  public phone: string;
+
+  @column()
   public rememberMeToken: string | null;
 
   @column.dateTime({ autoCreate: true })
@@ -23,6 +27,9 @@ export default class Customer extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
+
+  @column.dateTime()
+  public deletedAt: DateTime;
 
   @beforeCreate()
   public static async createUUID(customer: Customer) {

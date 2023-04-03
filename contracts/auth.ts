@@ -16,15 +16,15 @@ declare module '@ioc:Adonis/Addons/Auth' {
 
   interface GuardsList {
     customer: {
-      implementation: BasicAuthGuardContract<'customer', 'customer'>;
-      config: BasicAuthGuardConfig<'customer'>;
-      client: BasicAuthClientContract<'customer'>;
+      implementation: OATGuardContract<'customer', 'customer'>;
+      config: OATGuardConfig<'customer'>;
+      client: OATClientContract<'customer'>;
     };
 
     provider: {
-      implementation: BasicAuthGuardContract<'provider', 'provider'>;
-      config: BasicAuthGuardConfig<'provider'>;
-      client: BasicAuthClientContract<'provider'>;
+      implementation: OATGuardContract<'provider', 'provider'>;
+      config: OATGuardConfig<'provider'>;
+      client: OATClientContract<'provider'>;
     };
   }
 }

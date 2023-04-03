@@ -14,6 +14,12 @@ export default class Provider extends BaseModel {
   public password: string;
 
   @column()
+  public name: string;
+
+  @column()
+  public phone: string;
+
+  @column()
   public rememberMeToken: string | null;
 
   @column.dateTime({ autoCreate: true })
@@ -21,6 +27,9 @@ export default class Provider extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
+
+  @column.dateTime()
+  public deletedAt: DateTime;
 
   @beforeCreate()
   public static async createUUID(provider: Provider) {

@@ -4,8 +4,14 @@ const authConfig: AuthConfig = {
   guard: 'customer',
   guards: {
     customer: {
-      driver: 'basic',
-      realm: 'Login',
+      driver: 'oat',
+      tokenProvider: {
+        type: 'api',
+        driver: 'database',
+        table: 'api_tokens',
+        foreignKey: 'customer_id',
+      },
+
       provider: {
         driver: 'lucid',
         identifierKey: 'id',
@@ -15,8 +21,14 @@ const authConfig: AuthConfig = {
     },
 
     provider: {
-      driver: 'basic',
-      realm: 'Login',
+      driver: 'oat',
+      tokenProvider: {
+        type: 'api',
+        driver: 'database',
+        table: 'api_tokens',
+        foreignKey: 'provider_id',
+      },
+
       provider: {
         driver: 'lucid',
         identifierKey: 'id',
