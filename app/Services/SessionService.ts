@@ -10,15 +10,17 @@ export default class SessionService {
 
     if (!IAccountType[type]) throw new Error('This type does not exist.');
 
-    if (type === IAccountType.customer) {
-      await Customer.query().whereNull('deletedAt').where('email', email).firstOrFail();
-    }
+    const checkAccount = {
+      customer: async () =>
+        await Customer.query().whereNull('deletedAt').where('email', email).firstOrFail(),
 
-    if (type === IAccountType.provider) {
-      await Provider.query().whereNull('deletedAt').where('email', email).firstOrFail();
-    }
+      provider: async () =>
+        await Provider.query().whereNull('deletedAt').where('email', email).firstOrFail(),
+    };
 
-    const token: any = await auth.use(IAccountType[type]).attempt(email, password);
+    await checkAccount[IAccountType[type]]();
+
+    const token = await auth.use(IAccountType[type]).attempt(email, password);
 
     return token;
   }

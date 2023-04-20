@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
-import { responseError, responseSuccess } from 'App/Helpers/ApiResponse';
+import Response from 'App/Helpers/Response';
 import SessionService from 'App/Services/SessionService';
 import AuthenticateValidator from 'App/Validators/AuthenticateValidator';
 
@@ -9,9 +9,9 @@ export default class SessionsController {
       const payload = await request.validate(AuthenticateValidator);
       const user = await SessionService.login(payload, auth);
 
-      return responseSuccess(response, user);
+      return Response.Success(response, user);
     } catch (error) {
-      return responseError(response, error);
+      return Response.Error(response, error);
     }
   }
 
@@ -19,9 +19,9 @@ export default class SessionsController {
     try {
       const user = await SessionService.logout(auth);
 
-      return responseSuccess(response, user);
+      return Response.Success(response, user);
     } catch (error) {
-      return responseError(response, error);
+      return Response.Error(response, error);
     }
   }
 }
