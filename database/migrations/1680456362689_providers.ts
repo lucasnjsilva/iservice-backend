@@ -18,6 +18,7 @@ export default class extends BaseSchema {
        */
       table.string('name').notNullable();
       table.string('phone').nullable();
+      table.string('profile_image').nullable();
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL

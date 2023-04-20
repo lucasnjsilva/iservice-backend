@@ -20,6 +20,9 @@ export default class Provider extends BaseModel {
   public phone: string;
 
   @column()
+  public profileImage: string;
+
+  @column()
   public rememberMeToken: string | null;
 
   @column.dateTime({ autoCreate: true })

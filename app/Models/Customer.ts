@@ -22,14 +22,14 @@ export default class Customer extends BaseModel {
   @column()
   public rememberMeToken: string | null;
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ serializeAs: null, autoCreate: true })
   public createdAt: DateTime;
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ serializeAs: null, autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
 
-  @column.dateTime()
-  public deletedAt: DateTime;
+  @column.dateTime({ serializeAs: null })
+  public deletedAt: DateTime | null;
 
   @beforeCreate()
   public static async createUUID(customer: Customer) {
@@ -41,5 +41,11 @@ export default class Customer extends BaseModel {
     if (customer.$dirty.password) {
       customer.password = await Hash.make(customer.password);
     }
+  }
+
+  @beforeSave()
+  public static async cleanData(customer: Customer) {
+    // customer.cpf = customer.cpf.replace(/[^0-9 ]/g, '');
+    customer.phone = customer.phone.trim().replace(/[^0-9 ]|\s/g, '');
   }
 }
