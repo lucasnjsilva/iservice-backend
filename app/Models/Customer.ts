@@ -17,6 +17,9 @@ export default class Customer extends BaseModel {
   public name: string;
 
   @column()
+  public cpf: string;
+
+  @column()
   public phone: string;
 
   @column()
@@ -45,7 +48,7 @@ export default class Customer extends BaseModel {
 
   @beforeSave()
   public static async cleanData(customer: Customer) {
-    // customer.cpf = customer.cpf.replace(/[^0-9 ]/g, '');
     customer.phone = customer.phone.trim().replace(/[^0-9 ]|\s/g, '');
+    customer.cpf = customer.cpf.trim().replace(/[^0-9 ]/g, '');
   }
 }

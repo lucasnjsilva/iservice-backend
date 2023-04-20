@@ -17,6 +17,7 @@ export default class extends BaseSchema {
        * Others
        */
       table.string('name').notNullable();
+      table.string('cnpj').notNullable();
       table.string('phone').nullable();
       table.string('profile_image').nullable();
 

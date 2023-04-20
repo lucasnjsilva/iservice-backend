@@ -17,6 +17,9 @@ export default class Provider extends BaseModel {
   public name: string;
 
   @column()
+  public cnpj: string;
+
+  @column()
   public phone: string;
 
   @column()
@@ -32,7 +35,7 @@ export default class Provider extends BaseModel {
   public updatedAt: DateTime;
 
   @column.dateTime()
-  public deletedAt: DateTime;
+  public deletedAt: DateTime | null;
 
   @beforeCreate()
   public static async createUUID(provider: Provider) {
@@ -40,9 +43,15 @@ export default class Provider extends BaseModel {
   }
 
   @beforeSave()
-  public static async hashPassword(customer: Provider) {
-    if (customer.$dirty.password) {
-      customer.password = await Hash.make(customer.password);
+  public static async hashPassword(provider: Provider) {
+    if (provider.$dirty.password) {
+      provider.password = await Hash.make(provider.password);
     }
+  }
+
+  @beforeSave()
+  public static async cleanData(provider: Provider) {
+    provider.phone = provider.phone.trim().replace(/[^0-9 ]|\s/g, '');
+    provider.cnpj = provider.cnpj.trim().replace(/[^0-9 ]/g, '');
   }
 }

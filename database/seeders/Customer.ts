@@ -8,6 +8,8 @@ export default class extends BaseSeeder {
         name: 'Lucas Nathan',
         email: 'lucasnathanj@gmail.com',
         password: 'senha123',
+        cpf: '833.148.580-78',
+        phone: '(95) 98789-4887',
       },
     ]);
   }
