@@ -9,9 +9,14 @@ export default class CreateCustomerValidator {
     password: schema.string({}, [rules.required(), rules.minLength(8)]),
     name: schema.string({}, [rules.required()]),
     phone: schema.string({}, [rules.required()]),
+    cpf: schema.string({}, [
+      rules.required(),
+      rules.unique({ table: 'customers', column: 'cpf' }),
+    ]),
   });
 
   public messages: CustomMessages = {
     required: 'The {{ field }} is required.',
+    unique: 'The {{ field }} already is registered.',
   };
 }

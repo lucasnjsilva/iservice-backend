@@ -3,6 +3,7 @@ export interface ICreateCustomer {
   password: string;
   name: string;
   phone: string;
+  cpf: string;
 }
 
 export interface IUpdateCustomer {
@@ -10,4 +11,5 @@ export interface IUpdateCustomer {
   password?: string;
   name?: string;
   phone?: string;
+  cpf?: string;
 }
