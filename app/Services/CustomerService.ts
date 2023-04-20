@@ -1,3 +1,4 @@
+import AppError from 'App/Helpers/AppError';
 import Customer from 'App/Models/Customer';
 import { type IUpdateCustomer, type ICreateCustomer } from 'App/interfaces/ICustomer';
 import { DateTime } from 'luxon';
@@ -16,10 +17,11 @@ export default class CustomerService {
 
   static async show(id: string) {
     try {
-      const query = await Customer.query()
-        .whereNull('deletedAt')
-        .where('id', id)
-        .firstOrFail();
+      const query = await Customer.query().whereNull('deletedAt').where('id', id).first();
+
+      if (!query) {
+        throw AppError.E_NOT_FOUND();
+      }
 
       return query;
     } catch (error) {
@@ -52,7 +54,7 @@ export default class CustomerService {
         .where('id', id)
         .first();
 
-      if (!customer) throw new Error('Customer not found.');
+      if (!customer) throw AppError.E_NOT_FOUND();
 
       await customer.merge(payload).save();
 
@@ -69,7 +71,7 @@ export default class CustomerService {
         .where('id', id)
         .first();
 
-      if (!customer) throw new Error('Customer not found.');
+      if (!customer) throw AppError.E_NOT_FOUND();
 
       await customer.merge({ deletedAt: DateTime.now() }).save();
 
@@ -86,7 +88,7 @@ export default class CustomerService {
         .where('id', id)
         .first();
 
-      if (!customer) throw new Error('Customer not found.');
+      if (!customer) throw AppError.E_NOT_FOUND();
 
       await customer.merge({ deletedAt: null }).save();
 
@@ -103,7 +105,7 @@ export default class CustomerService {
         .where('id', id)
         .first();
 
-      if (!customer) throw new Error('Customer not found.');
+      if (!customer) throw AppError.E_NOT_FOUND();
 
       await customer.delete();
 

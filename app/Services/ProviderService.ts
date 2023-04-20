@@ -1,3 +1,4 @@
+import AppError from 'App/Helpers/AppError';
 import { type ICreateProvider, type IUpdateProvider } from 'App/interfaces/IProvider';
 import Provider from 'App/Models/Provider';
 import { DateTime } from 'luxon';
@@ -16,10 +17,9 @@ export default class ProviderService {
 
   static async show(id: string) {
     try {
-      const query = await Provider.query()
-        .whereNull('deletedAt')
-        .where('id', id)
-        .firstOrFail();
+      const query = await Provider.query().whereNull('deletedAt').where('id', id).first();
+
+      if (!query) throw AppError.E_NOT_FOUND();
 
       return query;
     } catch (error) {
@@ -52,7 +52,7 @@ export default class ProviderService {
         .where('id', id)
         .first();
 
-      if (!provider) throw new Error('Provider not found.');
+      if (!provider) throw AppError.E_NOT_FOUND();
 
       await provider.merge(payload).save();
 
@@ -69,7 +69,7 @@ export default class ProviderService {
         .where('id', id)
         .first();
 
-      if (!provider) throw new Error('Provider not found.');
+      if (!provider) throw AppError.E_NOT_FOUND();
 
       await provider.merge({ deletedAt: DateTime.now() }).save();
 
@@ -86,7 +86,7 @@ export default class ProviderService {
         .where('id', id)
         .first();
 
-      if (!provider) throw new Error('Provider not found.');
+      if (!provider) throw AppError.E_NOT_FOUND();
 
       await provider.merge({ deletedAt: null }).save();
 
@@ -103,7 +103,7 @@ export default class ProviderService {
         .where('id', id)
         .first();
 
-      if (!provider) throw new Error('Provider not found.');
+      if (!provider) throw AppError.E_NOT_FOUND();
 
       await provider.delete();
 
