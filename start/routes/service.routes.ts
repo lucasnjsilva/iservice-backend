@@ -5,6 +5,9 @@ Route.group(() => {
   Route.get('/services', 'ServicesController.index');
 });
 
+// Rotas protegidas (só precisa de autenticação)
+Route.group(() => {}).middleware('auth');
+
 // Rotas privadas
 Route.group(() => {
   Route.get('/services/:id', 'ServicesController.show');
@@ -14,6 +17,3 @@ Route.group(() => {
   Route.patch('/services/restore/:id', 'ServicesController.restore');
   Route.delete('/services', 'ServicesController.destroy');
 }).middleware(['auth', 'providerPermission']);
-
-// Rotas protegidas
-Route.group(() => {});
