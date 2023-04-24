@@ -1,6 +1,13 @@
 import { DateTime } from 'luxon';
-import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm';
+import {
+  BaseModel,
+  BelongsTo,
+  beforeCreate,
+  belongsTo,
+  column,
+} from '@ioc:Adonis/Lucid/Orm';
 import Customer from './Customer';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class CustomerAddress extends BaseModel {
   @column({ isPrimary: true })
@@ -44,4 +51,9 @@ export default class CustomerAddress extends BaseModel {
 
   @column.dateTime({ serializeAs: null })
   public deletedAt: DateTime | null;
+
+  @beforeCreate()
+  public static async createUUID(customer: CustomerAddress) {
+    customer.id = uuidv4();
+  }
 }

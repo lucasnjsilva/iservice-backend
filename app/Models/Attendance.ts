@@ -6,30 +6,34 @@ import {
   belongsTo,
   column,
 } from '@ioc:Adonis/Lucid/Orm';
-import Provider from './Provider';
+import Service from './Service';
+import Customer from './Customer';
 import { v4 as uuidv4 } from 'uuid';
 
-export default class Service extends BaseModel {
+export default class Attendance extends BaseModel {
   @column({ isPrimary: true })
   public id: string;
 
   @column()
-  public name: string;
+  public serviceId: string;
+
+  @belongsTo(() => Service)
+  public service: BelongsTo<typeof Service>;
 
   @column()
-  public description: string;
+  public customerId: string;
+
+  @belongsTo(() => Customer)
+  public customer: BelongsTo<typeof Customer>;
+
+  @column.date()
+  public solicitationDate: DateTime;
+
+  @column.date()
+  public attendanceDate: DateTime;
 
   @column()
-  public type: string;
-
-  @column()
-  public cost: number;
-
-  @column()
-  public providerId: string;
-
-  @belongsTo(() => Provider)
-  public provider: BelongsTo<typeof Provider>;
+  public status: string;
 
   @column.dateTime({ serializeAs: null, autoCreate: true })
   public createdAt: DateTime;
@@ -41,7 +45,7 @@ export default class Service extends BaseModel {
   public deletedAt: DateTime | null;
 
   @beforeCreate()
-  public static async createUUID(service: Service) {
-    service.id = uuidv4();
+  public static async createUUID(attendance: Attendance) {
+    attendance.id = uuidv4();
   }
 }
