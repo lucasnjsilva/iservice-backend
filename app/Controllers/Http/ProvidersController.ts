@@ -30,7 +30,8 @@ export default class ProvidersController {
   public async create({ request, response }: HttpContextContract) {
     try {
       const payload = await request.validate(CreateProviderValidator);
-      const customer = await ProviderService.create(payload);
+      const profileImage = request.file('profileImage');
+      const customer = await ProviderService.create({ ...payload, profileImage });
 
       return Response.Success(response, customer);
     } catch (error) {
@@ -42,7 +43,8 @@ export default class ProvidersController {
     try {
       const { id } = params;
       const payload = await request.validate(UpdateProviderValidator);
-      const customer = await ProviderService.update(id, payload);
+      const profileImage = request.file('profileImage');
+      const customer = await ProviderService.update(id, { ...payload, profileImage });
 
       return Response.Success(response, customer);
     } catch (error) {

@@ -4,6 +4,7 @@ export interface ICreateProvider {
   name: string;
   phone: string;
   cnpj: string;
+  profileImage?: any;
 }
 
 export interface IUpdateProvider {
@@ -12,4 +13,5 @@ export interface IUpdateProvider {
   name?: string;
   phone?: string;
   cnpj?: string;
+  profileImage?: any;
 }

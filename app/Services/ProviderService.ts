@@ -1,7 +1,9 @@
 import AppError from 'App/Helpers/AppError';
-import { type ICreateProvider, type IUpdateProvider } from 'App/interfaces/IProvider';
 import Provider from 'App/Models/Provider';
+import { type ICreateProvider, type IUpdateProvider } from 'App/interfaces/IProvider';
 import { DateTime } from 'luxon';
+import { cuid } from '@ioc:Adonis/Core/Helpers';
+import Drive from '@ioc:Adonis/Core/Drive';
 
 export default class ProviderService {
   static async index(page: number = 1) {
@@ -29,18 +31,43 @@ export default class ProviderService {
 
   static async create(payload: ICreateProvider) {
     try {
-      const { email } = payload;
-      const providerExists = await Provider.query()
+      const { email, cnpj, profileImage } = payload;
+
+      // Verifications
+      const providerEmailExists = await Provider.query()
         .whereNull('deletedAt')
         .where('email', email)
         .first();
 
-      if (providerExists) throw new Error("The provider's e-mail is already registered.");
+      if (providerEmailExists) {
+        throw new Error("The provider's e-mail is already registered.");
+      }
 
-      const query = await Provider.create(payload);
+      const providerCNPJExists = await Provider.query()
+        .whereNull('deletedAt')
+        .where('cnpj', cnpj)
+        .first();
+
+      if (providerCNPJExists) {
+        throw new Error("The provider's cnpj is already registered.");
+      }
+
+      // Upload
+      const filename = `${cuid()}.${profileImage.extname}`;
+      let profileImagePath = '';
+
+      if (profileImage) {
+        await profileImage.moveToDisk('profile_images', { name: filename });
+        profileImagePath = filename;
+      }
+
+      // Create Data
+      const query = await Provider.create({ ...payload, profileImage: profileImagePath });
 
       return query;
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
@@ -54,7 +81,37 @@ export default class ProviderService {
 
       if (!provider) throw AppError.E_NOT_FOUND();
 
-      await provider.merge(payload).save();
+      let email: string | undefined = '';
+      let cnpj: string | undefined = '';
+      if (provider.email !== payload.email) email = payload.email;
+      if (provider.cnpj !== payload.cnpj) cnpj = payload.cnpj;
+
+      if (payload.profileImage) {
+        const currentFilename = provider.profileImage;
+        const newFilename = `${cuid()}.${payload.profileImage.extname}`;
+
+        await Drive.delete(`profile_images/${currentFilename}`);
+        await payload.profileImage.moveToDisk('profile_images', { name: newFilename });
+
+        const data = {
+          ...payload,
+          email: email ?? payload.email,
+          cnpj: cnpj ?? payload.email,
+          profileImage: newFilename,
+        };
+
+        await provider.merge(data).save();
+
+        return provider;
+      }
+
+      const data = {
+        ...payload,
+        email: email ?? payload.email,
+        cnpj: cnpj ?? payload.email,
+      };
+
+      await provider.merge(data).save();
 
       return provider;
     } catch (error) {
@@ -104,6 +161,9 @@ export default class ProviderService {
         .first();
 
       if (!provider) throw AppError.E_NOT_FOUND();
+
+      const currentFilename = provider.profileImage;
+      await Drive.delete(`profile_images/${currentFilename}`);
 
       await provider.delete();
 

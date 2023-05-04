@@ -13,6 +13,7 @@ export default class CreateProviderValidator {
       rules.required(),
       rules.unique({ table: 'providers', column: 'cnpj' }),
     ]),
+    profileImage: schema.file.optional({ size: '2mb', extnames: ['jpg', 'jpeg', 'png'] }),
   });
 
   public messages: CustomMessages = {
