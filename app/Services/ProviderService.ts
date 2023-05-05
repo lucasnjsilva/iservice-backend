@@ -40,7 +40,7 @@ export default class ProviderService {
         .first();
 
       if (providerEmailExists) {
-        throw new Error("The provider's e-mail is already registered.");
+        throw AppError.E_GENERIC_ERROR("The provider's e-mail is already registered.");
       }
 
       const providerCNPJExists = await Provider.query()
@@ -49,7 +49,7 @@ export default class ProviderService {
         .first();
 
       if (providerCNPJExists) {
-        throw new Error("The provider's cnpj is already registered.");
+        throw AppError.E_GENERIC_ERROR("The provider's cnpj is already registered.");
       }
 
       // Upload

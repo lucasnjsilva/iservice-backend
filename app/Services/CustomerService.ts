@@ -37,7 +37,8 @@ export default class CustomerService {
         .where('email', email)
         .first();
 
-      if (customerExists) throw new Error("The customer's e-mail is already registered.");
+      if (customerExists)
+        throw AppError.E_GENERIC_ERROR("The customer's e-mail is already registered.");
 
       const query = await Customer.create(payload);
 

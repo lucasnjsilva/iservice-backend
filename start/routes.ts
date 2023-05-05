@@ -5,3 +5,4 @@ import './routes/provider.routes';
 import './routes/service.routes';
 import './routes/attendance.routes';
 import './routes/evaluation.routes';
+import './routes/forgotPassword.routes';

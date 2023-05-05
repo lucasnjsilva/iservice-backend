@@ -1,7 +1,15 @@
 import { DateTime } from 'luxon';
 import Hash from '@ioc:Adonis/Core/Hash';
-import { column, beforeSave, BaseModel, beforeCreate } from '@ioc:Adonis/Lucid/Orm';
+import {
+  column,
+  beforeSave,
+  BaseModel,
+  beforeCreate,
+  hasMany,
+  HasMany,
+} from '@ioc:Adonis/Lucid/Orm';
 import { v4 as uuidv4 } from 'uuid';
+import ForgotPassword from './ForgotPassword';
 
 export default class Customer extends BaseModel {
   @column({ isPrimary: true })
@@ -51,4 +59,12 @@ export default class Customer extends BaseModel {
     customer.phone = customer.phone.trim().replace(/[^0-9 ]|\s/g, '');
     customer.cpf = customer.cpf.trim().replace(/[^0-9 ]/g, '');
   }
+
+  @hasMany(() => ForgotPassword)
+  public customerForgotPassword: HasMany<typeof ForgotPassword>;
+
+  @hasMany(() => ForgotPassword, {
+    onQuery: async (query) => await query.where('status', 'EMAIL_SENT'),
+  })
+  public passwordResetTokens: HasMany<typeof ForgotPassword>;
 }
