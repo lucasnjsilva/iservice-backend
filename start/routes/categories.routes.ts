@@ -16,4 +16,4 @@ Route.group(() => {
   Route.patch('/categories/delete/:id', 'CategoriesController.delete');
   Route.patch('/categories/restore/:id', 'CategoriesController.restore');
   Route.delete('/categories/:id', 'CategoriesController.destroy');
-}).middleware(['auth']);
+}).middleware(['auth', 'adminPermission']);

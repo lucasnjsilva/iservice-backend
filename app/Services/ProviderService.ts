@@ -66,8 +66,6 @@ export default class ProviderService {
 
       return query;
     } catch (error) {
-      console.log(error);
-
       throw error;
     }
   }

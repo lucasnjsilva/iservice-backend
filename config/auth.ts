@@ -36,6 +36,23 @@ const authConfig: AuthConfig = {
         model: async () => await import('App/Models/Provider'),
       },
     },
+
+    admin: {
+      driver: 'oat',
+      tokenProvider: {
+        type: 'api',
+        driver: 'database',
+        table: 'api_tokens',
+        foreignKey: 'admin_id',
+      },
+
+      provider: {
+        driver: 'lucid',
+        identifierKey: 'id',
+        uids: ['email'],
+        model: async () => await import('App/Models/Admin'),
+      },
+    },
   },
 };
 

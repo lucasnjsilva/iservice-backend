@@ -1,17 +1,18 @@
 import { schema, type CustomMessages, rules } from '@ioc:Adonis/Core/Validator';
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
-export default class AuthenticateValidator {
+export default class CreateAdminValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
     email: schema.string({}, [rules.email(), rules.required()]),
-    password: schema.string({}, [rules.minLength(8), rules.required()]),
-    type: schema.enum(['customer', 'provider', 'admin'], [rules.required()]),
+    password: schema.string({}, [rules.required(), rules.minLength(8)]),
+    name: schema.string({}, [rules.required()]),
+    phone: schema.string({}, [rules.required()]),
   });
 
   public messages: CustomMessages = {
-    'password.minLength': 'Minimum password length is 8 characters.',
-    'type.enum': 'The options are "customer" and "provider".',
+    required: 'The {{ field }} is required.',
+    unique: 'The {{ field }} already is registered.',
   };
 }

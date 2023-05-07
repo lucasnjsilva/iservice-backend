@@ -1,3 +1,4 @@
+import type Admin from 'App/Models/Admin';
 import type Customer from 'App/Models/Customer';
 import type Provider from 'App/Models/Provider';
 
@@ -12,6 +13,11 @@ declare module '@ioc:Adonis/Addons/Auth' {
       implementation: LucidProviderContract<typeof Provider>;
       config: LucidProviderConfig<typeof Provider>;
     };
+
+    admin: {
+      implementation: LucidProviderContract<typeof Admin>;
+      config: LucidProviderConfig<typeof Admin>;
+    };
   }
 
   interface GuardsList {
@@ -25,6 +31,12 @@ declare module '@ioc:Adonis/Addons/Auth' {
       implementation: OATGuardContract<'provider', 'provider'>;
       config: OATGuardConfig<'provider'>;
       client: OATClientContract<'provider'>;
+    };
+
+    admin: {
+      implementation: OATGuardContract<'admin', 'admin'>;
+      config: OATGuardConfig<'admin'>;
+      client: OATClientContract<'admin'>;
     };
   }
 }

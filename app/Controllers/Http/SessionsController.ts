@@ -24,4 +24,14 @@ export default class SessionsController {
       return Response.Error(response, error);
     }
   }
+
+  public async show({ auth, response }: HttpContextContract) {
+    try {
+      const user = await SessionService.show(auth);
+
+      return Response.Success(response, user);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
 }

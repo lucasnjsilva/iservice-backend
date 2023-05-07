@@ -15,10 +15,13 @@ export default class ApiTokens extends BaseModel {
   public type: string;
 
   @column()
-  public customer_id: number;
+  public customer_id: string;
 
   @column()
-  public provider_id: number;
+  public provider_id: string;
+
+  @column()
+  public admin_id: string;
 
   @column.dateTime()
   public expiresAt: DateTime;

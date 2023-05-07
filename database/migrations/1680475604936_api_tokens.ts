@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.increments('id').primary();
       table.uuid('customer_id').references('id').inTable('customers').onDelete('CASCADE');
       table.uuid('provider_id').references('id').inTable('providers').onDelete('CASCADE');
+      table.uuid('admin_id').references('id').inTable('admins').onDelete('CASCADE');
       table.string('name').notNullable();
       table.string('type').notNullable();
       table.string('token', 64).notNullable().unique();

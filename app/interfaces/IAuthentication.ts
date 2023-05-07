@@ -1,6 +1,7 @@
 export enum IAccountType {
   customer = 'customer',
   provider = 'provider',
+  admin = 'admin',
 }
 
 export interface IAuthenticate {

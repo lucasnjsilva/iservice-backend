@@ -9,4 +9,5 @@ Server.middleware.registerNamed({
   auth: async () => await import('App/Middleware/Auth'),
   customerPermission: async () => await import('App/Middleware/CustomerPermission'),
   providerPermission: async () => await import('App/Middleware/ProviderPermission'),
+  adminPermission: async () => await import('App/Middleware/AdminPermission'),
 });
