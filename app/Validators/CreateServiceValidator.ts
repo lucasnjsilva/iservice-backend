@@ -7,7 +7,7 @@ export default class CreateServiceValidator {
   public schema = schema.create({
     name: schema.string({}, [rules.required()]),
     description: schema.string({}, [rules.required()]),
-    type: schema.string({}, [rules.required()]),
+    categoryId: schema.string({}, [rules.required()]),
     cost: schema.number([rules.required()]),
   });
 

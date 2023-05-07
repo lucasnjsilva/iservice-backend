@@ -7,7 +7,7 @@ export default class UpdateServiceValidator {
   public schema = schema.create({
     name: schema.string.optional(),
     description: schema.string.optional(),
-    type: schema.string.optional(),
+    categoryId: schema.string.optional(),
     cost: schema.number.optional(),
   });
 

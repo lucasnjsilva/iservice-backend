@@ -2,6 +2,7 @@ import AppError from 'App/Helpers/AppError';
 import Service from 'App/Models/Service';
 import { type IUpdateService, type ICreateService } from 'App/interfaces/IService';
 import { DateTime } from 'luxon';
+import CategoryService from './CategoryService';
 
 export default class ServicesService {
   static async index(page: number = 1) {
@@ -17,7 +18,12 @@ export default class ServicesService {
 
   static async show(id: number) {
     try {
-      const query = await Service.query().whereNull('deletesAt').where('id', id).first();
+      const query = await Service.query()
+        .preload('provider')
+        .preload('category')
+        .whereNull('deletedAt')
+        .where('id', id)
+        .first();
 
       if (!query) throw AppError.E_NOT_FOUND();
 
@@ -29,6 +35,10 @@ export default class ServicesService {
 
   static async create(payload: ICreateService, providerId: string) {
     try {
+      const category = await CategoryService.show(payload.categoryId);
+
+      if (!category) throw AppError.E_GENERIC_ERROR('Category not found.');
+
       const query = await Service.create({ ...payload, providerId });
 
       return query;
@@ -39,6 +49,12 @@ export default class ServicesService {
 
   static async update(payload: IUpdateService, id: string, providerId: string) {
     try {
+      if (payload.categoryId) {
+        const category = await CategoryService.show(payload.categoryId);
+
+        if (!category) throw AppError.E_GENERIC_ERROR('Category not found.');
+      }
+
       const query = await Service.query()
         .whereNull('deletedAt')
         .where('id', id)

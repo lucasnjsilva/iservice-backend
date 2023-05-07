@@ -33,7 +33,7 @@ export default class Provider extends BaseModel {
   @column()
   public profileImage: string;
 
-  @column()
+  @column({ serializeAs: null })
   public rememberMeToken: string | null;
 
   @column.dateTime({ serializeAs: null, autoCreate: true })

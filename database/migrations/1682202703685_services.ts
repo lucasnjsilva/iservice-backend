@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.uuid('id').index().primary();
       table.string('name').notNullable();
       table.text('description').notNullable();
-      table.string('category').notNullable();
+      table.string('category_id').notNullable();
       table.double('cost').notNullable();
       table.string('provider_id').notNullable();
 

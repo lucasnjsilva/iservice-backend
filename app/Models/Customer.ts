@@ -30,7 +30,7 @@ export default class Customer extends BaseModel {
   @column()
   public phone: string;
 
-  @column()
+  @column({ serializeAs: null })
   public rememberMeToken: string | null;
 
   @column.dateTime({ serializeAs: null, autoCreate: true })

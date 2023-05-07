@@ -8,6 +8,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm';
 import Provider from './Provider';
 import { v4 as uuidv4 } from 'uuid';
+import Category from './Category';
 
 export default class Service extends BaseModel {
   @column({ isPrimary: true })
@@ -20,7 +21,10 @@ export default class Service extends BaseModel {
   public description: string;
 
   @column()
-  public type: string;
+  public categoryId: string;
+
+  @belongsTo(() => Category)
+  public category: BelongsTo<typeof Category>;
 
   @column()
   public cost: number;
