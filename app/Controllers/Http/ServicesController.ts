@@ -3,12 +3,14 @@ import Response from 'App/Helpers/Response';
 import ServicesService from 'App/Services/ServicesService';
 import CreateServiceValidator from 'App/Validators/CreateServiceValidator';
 import UpdateServiceValidator from 'App/Validators/UpdateServiceValidator';
+import { type IQueryFilters } from 'App/interfaces/IService';
 
 export default class ServicesController {
   public async index({ request, response }: HttpContextContract) {
     try {
       const { page } = request.qs();
-      const result = await ServicesService.index(page);
+      const filters = request.qs() as IQueryFilters;
+      const result = await ServicesService.index(page, filters);
 
       return Response.Pagination(response, result);
     } catch (error) {

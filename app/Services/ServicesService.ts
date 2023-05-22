@@ -1,16 +1,28 @@
 import AppError from 'App/Helpers/AppError';
 import Service from 'App/Models/Service';
-import { type IUpdateService, type ICreateService } from 'App/interfaces/IService';
+import {
+  type ICreateService,
+  type IUpdateService,
+  type IQueryFilters,
+} from 'App/interfaces/IService';
 import { DateTime } from 'luxon';
 import CategoryService from './CategoryService';
 
 export default class ServicesService {
-  static async index(page: number = 1) {
+  static async index(page: number = 1, filters: IQueryFilters) {
     try {
       const limit = 20;
-      const query = await Service.query().whereNull('deletedAt').paginate(page, limit);
+      const query = Service.query().whereNull('deletedAt');
+      const validFilters: Array<keyof IQueryFilters> = ['name', 'category', 'uf', 'city'];
 
-      return query;
+      Object.keys(filters).forEach((key) => {
+        const value = filters[key];
+        if (value !== undefined && validFilters.includes(key as keyof IQueryFilters)) {
+          query.where(key, value);
+        }
+      });
+
+      return await query.paginate(page, limit);
     } catch (error) {
       throw error;
     }

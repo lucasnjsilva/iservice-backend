@@ -11,3 +11,10 @@ export interface IUpdateService {
   categoryId?: string;
   cost?: number;
 }
+
+export interface IQueryFilters {
+  name?: string;
+  category?: string;
+  uf?: string;
+  city?: string;
+}
