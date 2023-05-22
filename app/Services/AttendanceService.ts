@@ -165,7 +165,7 @@ export default class AttendanceService {
     }
   }
 
-  static async listTopContractedServices() {
+  static async topContractedServices() {
     try {
       const query = await Attendance.query()
         .select('attendances.service_id')
@@ -178,6 +178,29 @@ export default class AttendanceService {
         .whereNull('attendances.deleted_at')
         .whereNull('services.deleted_at')
         .groupBy('attendances.service_id')
+        .count('*', 'contractCount')
+        .orderBy('contractCount', 'desc')
+        .limit(4);
+
+      return query;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async topContractedProfessionals() {
+    try {
+      const query = await Attendance.query()
+        .select('attendances.service_id')
+        .join('services', 'attendances.service_id', 'services.id')
+        .preload('service', (qs) => {
+          qs.whereNull('deletedAt').preload('provider', (qp) => {
+            qp.whereNull('deletedAt');
+          });
+        })
+        .whereNull('attendances.deleted_at')
+        .whereNull('services.deleted_at')
+        .groupBy('services.provider_id')
         .count('*', 'contractCount')
         .orderBy('contractCount', 'desc')
         .limit(4);

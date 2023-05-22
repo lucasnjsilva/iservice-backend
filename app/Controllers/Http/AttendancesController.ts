@@ -93,9 +93,19 @@ export default class AttendancesController {
     }
   }
 
-  public async listTopContractedServices({ response }: HttpContextContract) {
+  public async topContractedServices({ response }: HttpContextContract) {
     try {
-      const result = await AttendanceService.listTopContractedServices();
+      const result = await AttendanceService.topContractedServices();
+
+      return Response.Success(response, result);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
+
+  public async topContractedProfessionals({ response }: HttpContextContract) {
+    try {
+      const result = await AttendanceService.topContractedProfessionals();
 
       return Response.Success(response, result);
     } catch (error) {

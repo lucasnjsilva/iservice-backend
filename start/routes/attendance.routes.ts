@@ -2,7 +2,14 @@ import Route from '@ioc:Adonis/Core/Route';
 
 // Rotas públicas
 Route.group(() => {
-  Route.get('/most_contracted', 'AttendancesController.listTopContractedServices');
+  Route.get(
+    '/attendances/services/top-contracted',
+    'AttendancesController.topContractedServices'
+  );
+  Route.get(
+    '/attendances/professionals/top-contracted',
+    'AttendancesController.topContractedProfessionals'
+  );
 });
 
 // Rotas protegidas (só precisa de autenticação)
