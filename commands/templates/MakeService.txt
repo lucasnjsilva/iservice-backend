@@ -1,0 +1,59 @@
+// import YourModel from 'App/Models/YourModel';
+
+export default class {{filename}} {
+  static async index() {
+		try {
+			// . . .
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async show(id: string) {
+		try {
+			// . . .
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async create(payload: any) {
+		try {
+			// . . .
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async update(id: string, payload: any) {
+		try {
+			// . . .
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async delete(id: string) {
+		try {
+			// . . .
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async restore(id: string) {
+		try {
+			// . . .
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	static async destroy(id: string) {
+		try {
+			// . . .
+		} catch (error) {
+			throw error;
+		}
+	}
+}

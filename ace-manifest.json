@@ -1,5 +1,30 @@
 {
   "commands": {
+    "make:service": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/CreateService",
+      "commandName": "make:service",
+      "description": "Create a new service file",
+      "args": [
+        {
+          "type": "string",
+          "propertyName": "filename",
+          "name": "Filename",
+          "required": true
+        }
+      ],
+      "aliases": [],
+      "flags": [
+        {
+          "name": "r",
+          "propertyName": "r",
+          "type": "boolean"
+        }
+      ]
+    },
     "dump:rcfile": {
       "settings": {},
       "commandPath": "@adonisjs/core/build/commands/DumpRc",
