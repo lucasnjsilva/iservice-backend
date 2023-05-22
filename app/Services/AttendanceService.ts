@@ -164,4 +164,27 @@ export default class AttendanceService {
       throw error;
     }
   }
+
+  static async mostContracted() {
+    try {
+      const query = await Attendance.query()
+        .select('attendances.service_id')
+        .join('services', 'attendances.service_id', 'services.id')
+        .preload('service', (qs) => {
+          qs.whereNull('deletedAt').preload('provider', (qp) => {
+            qp.whereNull('deletedAt');
+          });
+        })
+        .whereNull('attendances.deleted_at')
+        .whereNull('services.deleted_at')
+        .groupBy('attendances.service_id')
+        .count('*', 'contractCount')
+        .orderBy('contractCount', 'desc')
+        .limit(4);
+
+      return query;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

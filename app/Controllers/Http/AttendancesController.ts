@@ -92,4 +92,14 @@ export default class AttendancesController {
       return Response.Error(response, error);
     }
   }
+
+  public async mostContracted({ response }: HttpContextContract) {
+    try {
+      const result = await AttendanceService.mostContracted();
+
+      return Response.Success(response, result);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
 }
