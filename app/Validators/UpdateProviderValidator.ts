@@ -11,6 +11,14 @@ export default class UpdateProviderValidator {
     phone: schema.string.optional(),
     cnpj: schema.string.optional(),
     profileImage: schema.file.optional({ size: '2mb', extnames: ['jpg', 'jpeg', 'png'] }),
+    address: schema.string.optional(),
+    number: schema.string.optional(),
+    neighborhood: schema.string.optional(),
+    complement: schema.string.optional(),
+    reference: schema.string.optional(),
+    city: schema.string.optional(),
+    uf: schema.string.optional(),
+    cep: schema.string.optional(),
   });
 
   public messages: CustomMessages = {

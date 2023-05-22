@@ -14,6 +14,14 @@ export default class CreateProviderValidator {
       rules.unique({ table: 'providers', column: 'cnpj' }),
     ]),
     profileImage: schema.file.optional({ size: '2mb', extnames: ['jpg', 'jpeg', 'png'] }),
+    address: schema.string({}, [rules.required()]),
+    number: schema.string.optional(),
+    neighborhood: schema.string({}, [rules.required()]),
+    complement: schema.string.optional(),
+    reference: schema.string.optional(),
+    city: schema.string({}, [rules.required()]),
+    uf: schema.string({}, [rules.required()]),
+    cep: schema.string({}, [rules.required()]),
   });
 
   public messages: CustomMessages = {

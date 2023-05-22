@@ -33,6 +33,30 @@ export default class Provider extends BaseModel {
   @column()
   public profileImage: string;
 
+  @column()
+  public address: string;
+
+  @column()
+  public number: string;
+
+  @column()
+  public neighborhood: string;
+
+  @column()
+  public complement: string;
+
+  @column()
+  public reference: string;
+
+  @column()
+  public city: string;
+
+  @column()
+  public uf: string;
+
+  @column()
+  public cep: string;
+
   @column({ serializeAs: null })
   public rememberMeToken: string | null;
 

@@ -22,6 +22,18 @@ export default class extends BaseSchema {
       table.string('profile_image').nullable();
 
       /**
+       * Address
+       */
+      table.string('address').notNullable();
+      table.string('number').nullable();
+      table.string('neighborhood').notNullable();
+      table.string('complement').nullable();
+      table.string('reference').nullable();
+      table.string('city').notNullable();
+      table.string('uf').notNullable();
+      table.string('cep').notNullable();
+
+      /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
        */
       table.timestamp('created_at', { useTz: true }).notNullable();
