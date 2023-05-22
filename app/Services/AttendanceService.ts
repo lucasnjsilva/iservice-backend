@@ -165,7 +165,7 @@ export default class AttendanceService {
     }
   }
 
-  static async mostContracted() {
+  static async listTopContractedServices() {
     try {
       const query = await Attendance.query()
         .select('attendances.service_id')
