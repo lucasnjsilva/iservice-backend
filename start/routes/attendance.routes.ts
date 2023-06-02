@@ -14,6 +14,10 @@ Route.group(() => {
     '/attendances/evaluations/:serviceId',
     'AttendancesController.getEvaluations'
   );
+  Route.get(
+    '/attendances/contracts_by_service',
+    'AttendancesController.countContractsByService'
+  );
 });
 
 // Rotas protegidas (só precisa de autenticação)

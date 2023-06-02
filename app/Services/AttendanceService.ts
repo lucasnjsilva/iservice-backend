@@ -8,13 +8,18 @@ import {
 import { DateTime } from 'luxon';
 
 export default class AttendanceService {
-  static async index(page: number = 1, userId: string, userType: string) {
+  static async index(
+    page: number = 1,
+    userId: string,
+    userType: string,
+    limit: number = 20
+  ) {
     try {
-      const limit = 20;
       const query = Attendance.query()
         .select('attendances.*')
         .join('services', 'attendances.service_id', 'services.id')
-        .preload('service')
+        .preload('service', async (q) => await q.preload('category'))
+        .preload('customer')
         .whereNull('attendances.deleted_at');
 
       if (userType === 'customer') {
@@ -24,6 +29,8 @@ export default class AttendanceService {
       if (userType === 'provider') {
         query.where('services.provider_id', userId);
       }
+
+      query.orderBy('attendances.attendance_date', 'desc');
 
       return await query.paginate(page, limit);
     } catch (error) {
@@ -167,7 +174,7 @@ export default class AttendanceService {
 
   static async topContractedServices() {
     try {
-      const query = await Attendance.query()
+      const query = Attendance.query()
         .select('attendances.service_id')
         .join('services', 'attendances.service_id', 'services.id')
         .preload('service', (qs) => {
@@ -182,7 +189,7 @@ export default class AttendanceService {
         .orderBy('contractCount', 'desc')
         .limit(4);
 
-      return query;
+      return await query;
     } catch (error) {
       throw error;
     }
@@ -226,6 +233,37 @@ export default class AttendanceService {
       });
 
       return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async countContractsByService(userId?: string) {
+    try {
+      const query = Attendance.query()
+        .select('services.name')
+        .count('*', 'contractCount')
+        .join('services', 'attendances.service_id', 'services.id')
+        .whereNull('attendances.deleted_at')
+        .whereNull('services.deleted_at')
+        .groupBy('services.name')
+        .orderBy('contractCount', 'desc');
+
+      if (userId) {
+        query.where('services.provider_id', userId);
+      }
+
+      const result = await query;
+
+      const countByService: Record<string, number> = {};
+
+      for (const row of result) {
+        const serviceName = row.$extras.name as string;
+        const contractCount = row.$extras.contractCount as number;
+        countByService[serviceName] = contractCount;
+      }
+
+      return countByService;
     } catch (error) {
       throw error;
     }

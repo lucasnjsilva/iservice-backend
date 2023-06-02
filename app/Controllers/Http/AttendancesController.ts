@@ -7,10 +7,10 @@ import UpdateAttendanceValidator from 'App/Validators/UpdateAttendanceValidator'
 export default class AttendancesController {
   public async index({ request, response, auth }: HttpContextContract) {
     try {
-      const { page } = request.qs();
+      const { page, limit } = request.qs();
       const userId = auth.user!.id;
       const userType = auth.name;
-      const result = await AttendanceService.index(page, userId, userType);
+      const result = await AttendanceService.index(page, userId, userType, Number(limit));
 
       return Response.Pagination(response, result);
     } catch (error) {
@@ -120,6 +120,17 @@ export default class AttendancesController {
       const result = await AttendanceService.getEvaluations(serviceId, page);
 
       return Response.Pagination(response, result);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
+
+  public async countContractsByService({ request, response }: HttpContextContract) {
+    try {
+      const { user } = request.qs();
+      const result = await AttendanceService.countContractsByService(user);
+
+      return Response.Success(response, result);
     } catch (error) {
       return Response.Error(response, error);
     }
