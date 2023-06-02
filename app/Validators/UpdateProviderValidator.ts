@@ -8,6 +8,7 @@ export default class UpdateProviderValidator {
     email: schema.string.optional({}, [rules.email()]),
     password: schema.string.optional({}, [rules.minLength(8)]),
     name: schema.string.optional(),
+    aboutMe: schema.string.optional(),
     phone: schema.string.optional(),
     cnpj: schema.string.optional(),
     profileImage: schema.file.optional({ size: '2mb', extnames: ['jpg', 'jpeg', 'png'] }),

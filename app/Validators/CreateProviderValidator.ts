@@ -8,6 +8,7 @@ export default class CreateProviderValidator {
     email: schema.string({}, [rules.email(), rules.required()]),
     password: schema.string({}, [rules.required(), rules.minLength(8)]),
     name: schema.string({}, [rules.required()]),
+    aboutMe: schema.string.optional(),
     phone: schema.string({}, [rules.required()]),
     cnpj: schema.string({}, [
       rules.required(),

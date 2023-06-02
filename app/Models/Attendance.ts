@@ -2,13 +2,16 @@ import { DateTime } from 'luxon';
 import {
   BaseModel,
   BelongsTo,
+  HasMany,
   beforeCreate,
   belongsTo,
   column,
+  hasMany,
 } from '@ioc:Adonis/Lucid/Orm';
 import Service from './Service';
 import Customer from './Customer';
 import { v4 as uuidv4 } from 'uuid';
+import Evaluation from './Evaluation';
 
 export default class Attendance extends BaseModel {
   @column({ isPrimary: true })
@@ -34,6 +37,9 @@ export default class Attendance extends BaseModel {
 
   @column()
   public status: string;
+
+  @hasMany(() => Evaluation, { foreignKey: 'attendanceId' })
+  public evaluations: HasMany<typeof Evaluation>;
 
   @column.dateTime({ serializeAs: null, autoCreate: true })
   public createdAt: DateTime;

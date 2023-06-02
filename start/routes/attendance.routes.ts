@@ -10,6 +10,10 @@ Route.group(() => {
     '/attendances/professionals/top-contracted',
     'AttendancesController.topContractedProfessionals'
   );
+  Route.get(
+    '/attendances/evaluations/:serviceId',
+    'AttendancesController.getEvaluations'
+  );
 });
 
 // Rotas protegidas (só precisa de autenticação)

@@ -8,6 +8,7 @@ import Provider from 'App/Models/Provider';
 import CustomerService from './CustomerService';
 import ProviderService from './ProviderService';
 import AdminService from './AdminService';
+import { IUserRoles } from 'App/interfaces/IUserRoles';
 
 export default class SessionService {
   static async login(data: IAuthenticate, auth: AuthContract): Promise<ApiTokens> {
@@ -45,20 +46,26 @@ export default class SessionService {
     try {
       if (auth.name === 'admin') {
         const query = await AdminService.show(auth.user!.id);
+        const result = query.toJSON();
+        result.role = IUserRoles.admin;
 
-        return query;
+        return result;
       }
 
       if (auth.name === 'customer') {
         const query = await CustomerService.show(auth.user!.id);
+        const result = query.toJSON();
+        result.role = IUserRoles.customer;
 
-        return query;
+        return result;
       }
 
       if (auth.name === 'provider') {
         const query = await ProviderService.show(auth.user!.id);
+        const result = query.toJSON();
+        result.role = IUserRoles.provider;
 
-        return query;
+        return result;
       }
     } catch (error) {
       throw error;

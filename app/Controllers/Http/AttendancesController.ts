@@ -112,4 +112,16 @@ export default class AttendancesController {
       return Response.Error(response, error);
     }
   }
+
+  public async getEvaluations({ request, response, params }: HttpContextContract) {
+    try {
+      const { page } = request.qs();
+      const { serviceId } = params;
+      const result = await AttendanceService.getEvaluations(serviceId, page);
+
+      return Response.Pagination(response, result);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
 }

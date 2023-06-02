@@ -12,15 +12,29 @@ export default class ServicesService {
   static async index(page: number = 1, filters: IQueryFilters) {
     try {
       const limit = 20;
-      const query = Service.query().whereNull('deletedAt');
-      const validFilters: Array<keyof IQueryFilters> = ['name', 'category', 'uf', 'city'];
+      const query = Service.query()
+        .select('services.*')
+        .preload('category')
+        .preload('provider')
+        .join('providers', 'services.provider_id', 'providers.id')
+        .join('categories', 'services.category_id', 'categories.id')
+        .whereNull('services.deleted_at');
 
-      Object.keys(filters).forEach((key) => {
-        const value = filters[key];
-        if (value !== undefined && validFilters.includes(key as keyof IQueryFilters)) {
-          query.where(key, value);
-        }
-      });
+      if (filters.name) {
+        query.where('services.name', 'like', `%${filters.name}%`);
+      }
+
+      if (filters.category) {
+        query.where('categories.name', 'like', `%${filters.category}%`);
+      }
+
+      if (filters.uf) {
+        query.where('providers.uf', filters.uf);
+      }
+
+      if (filters.city) {
+        query.where('providers.city', filters.city);
+      }
 
       return await query.paginate(page, limit);
     } catch (error) {
@@ -37,7 +51,7 @@ export default class ServicesService {
         .where('id', id)
         .first();
 
-      if (!query) throw AppError.E_NOT_FOUND();
+      if (!query) throw AppError.E_NOT_FOUND('Service not found.');
 
       return query;
     } catch (error) {

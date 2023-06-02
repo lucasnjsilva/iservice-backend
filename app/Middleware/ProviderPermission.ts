@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import type Admin from 'App/Models/Admin';
 import type Customer from 'App/Models/Customer';
 import type Provider from 'App/Models/Provider';
 import Response from 'App/Helpers/Response';
@@ -21,6 +22,12 @@ export default class ProviderPermission {
 
       if (auth.name === 'provider') {
         const hasPermission = await providerPermission(auth.user as Provider);
+        if (!hasPermission) throw AppError.E_UNAUTHORIZED();
+        await next();
+      }
+
+      if (auth.name === 'admin') {
+        const hasPermission = await providerPermission(auth.user as Admin);
         if (!hasPermission) throw AppError.E_UNAUTHORIZED();
         await next();
       }

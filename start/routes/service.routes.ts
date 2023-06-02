@@ -3,6 +3,7 @@ import Route from '@ioc:Adonis/Core/Route';
 // Rotas públicas
 Route.group(() => {
   Route.get('/services', 'ServicesController.index');
+  Route.get('/services/:id', 'ServicesController.show');
 });
 
 // Rotas protegidas (só precisa de autenticação)
@@ -10,7 +11,6 @@ Route.group(() => {}).middleware('auth');
 
 // Rotas privadas
 Route.group(() => {
-  Route.get('/services/:id', 'ServicesController.show');
   Route.post('/services', 'ServicesController.create');
   Route.put('/services/:id', 'ServicesController.update');
   Route.patch('/services/delete/:id', 'ServicesController.delete');

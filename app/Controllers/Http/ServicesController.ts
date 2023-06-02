@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import AppError from 'App/Helpers/AppError';
 import Response from 'App/Helpers/Response';
 import ServicesService from 'App/Services/ServicesService';
 import CreateServiceValidator from 'App/Validators/CreateServiceValidator';
@@ -31,6 +32,10 @@ export default class ServicesController {
 
   public async create({ request, response, auth }: HttpContextContract) {
     try {
+      if (auth.name === 'admin') {
+        throw AppError.E_GENERIC_ERROR('To access this route you need to be a provider.');
+      }
+
       const providerId = auth.user!.id;
       const payload = await request.validate(CreateServiceValidator);
       const result = await ServicesService.create(payload, providerId);

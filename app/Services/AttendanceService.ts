@@ -210,4 +210,24 @@ export default class AttendanceService {
       throw error;
     }
   }
+
+  static async getEvaluations(serviceId: string, page: number = 1) {
+    try {
+      const limit = 10;
+      const query = await Attendance.query()
+        .preload('evaluations')
+        .preload('customer')
+        .whereNull('deletedAt')
+        .where('serviceId', serviceId)
+        .paginate(page, limit);
+
+      const result = query.serialize({
+        fields: ['id', 'service_id'],
+      });
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

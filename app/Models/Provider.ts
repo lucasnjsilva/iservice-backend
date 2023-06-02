@@ -10,6 +10,7 @@ import {
 import Hash from '@ioc:Adonis/Core/Hash';
 import { v4 as uuidv4 } from 'uuid';
 import ForgotPassword from './ForgotPassword';
+import Service from './Service';
 
 export default class Provider extends BaseModel {
   @column({ isPrimary: true })
@@ -23,6 +24,9 @@ export default class Provider extends BaseModel {
 
   @column()
   public name: string;
+
+  @column()
+  public aboutMe: string;
 
   @column()
   public cnpj: string;
@@ -59,6 +63,9 @@ export default class Provider extends BaseModel {
 
   @column({ serializeAs: null })
   public rememberMeToken: string | null;
+
+  @hasMany(() => Service, { foreignKey: 'providerId' })
+  public services: HasMany<typeof Service>;
 
   @column.dateTime({ serializeAs: null, autoCreate: true })
   public createdAt: DateTime;

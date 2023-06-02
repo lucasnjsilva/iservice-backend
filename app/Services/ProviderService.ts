@@ -1,17 +1,45 @@
 import AppError from 'App/Helpers/AppError';
 import Provider from 'App/Models/Provider';
-import { type ICreateProvider, type IUpdateProvider } from 'App/interfaces/IProvider';
+import {
+  type IQueryFilters,
+  type ICreateProvider,
+  type IUpdateProvider,
+} from 'App/interfaces/IProvider';
 import { DateTime } from 'luxon';
 import { cuid } from '@ioc:Adonis/Core/Helpers';
 import Drive from '@ioc:Adonis/Core/Drive';
 
 export default class ProviderService {
-  static async index(page: number = 1) {
+  static async index(page: number = 1, filters: IQueryFilters) {
     try {
       const limit = 20;
-      const query = await Provider.query().whereNull('deletedAt').paginate(page, limit);
+      const query = Provider.query().whereNull('deletedAt');
+      const validFilters: Array<keyof IQueryFilters> = [
+        'name',
+        'email',
+        'phone',
+        'cnpj',
+        'address',
+        'number',
+        'neighborhood',
+        'complement',
+        'reference',
+        'cep',
+        'uf',
+        'city',
+      ];
 
-      return query;
+      Object.keys(filters).forEach((key) => {
+        const value = filters[key];
+
+        if (value !== undefined && value !== '') {
+          if (validFilters.includes(key as keyof IQueryFilters)) {
+            query.where(key, value);
+          }
+        }
+      });
+
+      return await query.paginate(page, limit);
     } catch (error) {
       throw error;
     }
@@ -19,7 +47,11 @@ export default class ProviderService {
 
   static async show(id: string) {
     try {
-      const query = await Provider.query().whereNull('deletedAt').where('id', id).first();
+      const query = await Provider.query()
+        .preload('services')
+        .whereNull('deletedAt')
+        .where('id', id)
+        .first();
 
       if (!query) throw AppError.E_NOT_FOUND();
 
@@ -53,10 +85,11 @@ export default class ProviderService {
       }
 
       // Upload
-      const filename = `${cuid()}.${profileImage.extname}`;
       let profileImagePath = '';
 
       if (profileImage) {
+        const filename = `${cuid()}.${profileImage.extname}`;
+
         await profileImage.moveToDisk('profile_images', { name: filename });
         profileImagePath = filename;
       }

@@ -3,12 +3,14 @@ import ProviderService from 'App/Services/ProviderService';
 import Response from 'App/Helpers/Response';
 import CreateProviderValidator from 'App/Validators/CreateProviderValidator';
 import UpdateProviderValidator from 'App/Validators/UpdateProviderValidator';
+import { type IQueryFilters } from 'App/interfaces/IProvider';
 
 export default class ProvidersController {
   public async index({ request, response }: HttpContextContract) {
     try {
       const { page } = request.qs();
-      const customers = await ProviderService.index(page);
+      const filters = request.qs() as IQueryFilters;
+      const customers = await ProviderService.index(page, filters);
 
       return Response.Pagination(response, customers);
     } catch (error) {
