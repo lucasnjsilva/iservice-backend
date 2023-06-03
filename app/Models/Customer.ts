@@ -7,9 +7,12 @@ import {
   beforeCreate,
   hasMany,
   HasMany,
+  HasOne,
+  hasOne,
 } from '@ioc:Adonis/Lucid/Orm';
 import { v4 as uuidv4 } from 'uuid';
 import ForgotPassword from './ForgotPassword';
+import CustomerAddress from './CustomerAddress';
 
 export default class Customer extends BaseModel {
   @column({ isPrimary: true })
@@ -29,6 +32,9 @@ export default class Customer extends BaseModel {
 
   @column()
   public phone: string;
+
+  @hasOne(() => CustomerAddress, { foreignKey: 'customerId' })
+  public address: HasOne<typeof CustomerAddress>;
 
   @column({ serializeAs: null })
   public rememberMeToken: string | null;

@@ -46,9 +46,10 @@ export default class AttendancesController {
   public async update({ request, response, auth, params }: HttpContextContract) {
     try {
       const { id } = params;
-      const customerId = auth.user!.id;
+      const userId = auth.user!.id;
+      const userType = auth.name;
       const payload = await request.validate(UpdateAttendanceValidator);
-      const result = await AttendanceService.update(payload, id, customerId);
+      const result = await AttendanceService.update(payload, id, userId, userType);
 
       return Response.Success(response, result);
     } catch (error) {

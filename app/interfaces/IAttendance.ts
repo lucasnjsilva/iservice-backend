@@ -14,4 +14,5 @@ export interface ICreateAttendance {
 
 export interface IUpdateAttendance {
   attendanceDate?: DateTime;
+  status?: string;
 }

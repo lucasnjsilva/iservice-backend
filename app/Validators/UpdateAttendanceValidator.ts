@@ -6,7 +6,14 @@ export default class UpdateAttendanceValidator {
 
   public schema = schema.create({
     attendanceDate: schema.date.optional(),
+    status: schema.enum.optional([
+      'CANCELED_BY_CUSTOMER',
+      'CANCELED_BY_PROVIDER',
+      'ATTENDED',
+    ]),
   });
 
-  public messages: CustomMessages = {};
+  public messages: CustomMessages = {
+    enum: "Options: 'CANCELED_BY_CUSTOMER', 'CANCELED_BY_PROVIDER' and 'ATTENDED'.",
+  };
 }

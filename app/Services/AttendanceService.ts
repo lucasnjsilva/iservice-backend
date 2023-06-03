@@ -44,7 +44,7 @@ export default class AttendanceService {
         .select('attendances.*')
         .join('services', 'attendances.service_id', 'services.id')
         .preload('service', async (service) => await service.preload('provider'))
-        .preload('customer')
+        .preload('customer', async (customer) => await customer.preload('address'))
         .whereNull('attendances.deleted_at')
         .where('attendances.id', id);
 
@@ -81,19 +81,57 @@ export default class AttendanceService {
     }
   }
 
-  static async update(payload: IUpdateAttendance, id: string, customerId: string) {
+  static async update(
+    payload: IUpdateAttendance,
+    id: string,
+    userId: string,
+    userType: string
+  ) {
     try {
-      const query = await Attendance.query()
-        .whereNull('deletedAt')
-        .where('id', id)
-        .where('customerId', customerId)
-        .first();
+      if (userType === 'customer') {
+        const query = await Attendance.query()
+          .whereNull('deletedAt')
+          .where('id', id)
+          .where('customerId', userId)
+          .first();
 
-      if (!query) throw AppError.E_NOT_FOUND();
+        if (!query) throw AppError.E_NOT_FOUND();
 
-      await query.merge(payload).save();
+        if (payload.status) {
+          payload = {
+            ...payload,
+            status: AttendanceStatus[payload.status],
+          };
+        }
 
-      return query;
+        await query.merge(payload).save();
+
+        return query;
+      }
+
+      if (userType === 'provider') {
+        const query = await Attendance.query()
+          .select('attendances.*')
+          .join('services', 'attendances.service_id', 'services.id')
+          .preload('service', async (service) => await service.preload('provider'))
+          .whereNull('attendances.deleted_at')
+          .where('attendances.id', id)
+          .where('services.provider_id', userId)
+          .first();
+
+        if (!query) throw AppError.E_NOT_FOUND();
+
+        if (payload.status) {
+          payload = {
+            ...payload,
+            status: AttendanceStatus[payload.status],
+          };
+        }
+
+        await query.merge(payload).save();
+
+        return query;
+      }
     } catch (error) {
       throw error;
     }
