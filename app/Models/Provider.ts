@@ -90,8 +90,13 @@ export default class Provider extends BaseModel {
 
   @beforeSave()
   public static async cleanData(provider: Provider) {
-    provider.phone = provider.phone.trim().replace(/[^0-9 ]|\s/g, '');
-    provider.cnpj = provider.cnpj.trim().replace(/[^0-9 ]/g, '');
+    if (provider.phone) {
+      provider.phone = provider.phone.trim().replace(/[^0-9 ]|\s/g, '');
+    }
+
+    if (provider.cnpj) {
+      provider.cnpj = provider.cnpj.trim().replace(/[^0-9 ]/g, '');
+    }
   }
 
   @hasMany(() => ForgotPassword)

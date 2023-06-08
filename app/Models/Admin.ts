@@ -45,6 +45,8 @@ export default class Admin extends BaseModel {
 
   @beforeSave()
   public static async cleanData(admin: Admin) {
-    admin.phone = admin.phone.trim().replace(/[^0-9 ]|\s/g, '');
+    if (admin.phone) {
+      admin.phone = admin.phone.trim().replace(/[^0-9 ]|\s/g, '');
+    }
   }
 }

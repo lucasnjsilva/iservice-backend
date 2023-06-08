@@ -112,8 +112,8 @@ export default class ProviderService {
 
       if (!provider) throw AppError.E_NOT_FOUND();
 
-      let email: string | undefined = '';
-      let cnpj: string | undefined = '';
+      let email: string | undefined;
+      let cnpj: string | undefined;
       if (provider.email !== payload.email) email = payload.email;
       if (provider.cnpj !== payload.cnpj) cnpj = payload.cnpj;
 
@@ -127,7 +127,7 @@ export default class ProviderService {
         const data = {
           ...payload,
           email: email ?? payload.email,
-          cnpj: cnpj ?? payload.email,
+          cnpj: cnpj ?? payload.cnpj,
           profileImage: newFilename,
         };
 
@@ -139,7 +139,7 @@ export default class ProviderService {
       const data = {
         ...payload,
         email: email ?? payload.email,
-        cnpj: cnpj ?? payload.email,
+        cnpj: cnpj ?? payload.cnpj,
       };
 
       await provider.merge(data).save();

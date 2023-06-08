@@ -62,8 +62,13 @@ export default class Customer extends BaseModel {
 
   @beforeSave()
   public static async cleanData(customer: Customer) {
-    customer.phone = customer.phone.trim().replace(/[^0-9 ]|\s/g, '');
-    customer.cpf = customer.cpf.trim().replace(/[^0-9 ]/g, '');
+    if (customer.phone) {
+      customer.phone = customer.phone.trim().replace(/[^0-9 ]|\s/g, '');
+    }
+
+    if (customer.cpf) {
+      customer.cpf = customer.cpf.trim().replace(/[^0-9 ]/g, '');
+    }
   }
 
   @hasMany(() => ForgotPassword)

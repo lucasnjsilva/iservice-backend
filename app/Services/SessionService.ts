@@ -71,4 +71,34 @@ export default class SessionService {
       throw error;
     }
   }
+
+  static async update(auth: AuthContract, payload: any) {
+    try {
+      if (auth.name === 'admin') {
+        const query = await AdminService.update(auth.user!.id, payload);
+        const result = query.toJSON();
+        result.role = IUserRoles.admin;
+
+        return result;
+      }
+
+      if (auth.name === 'customer') {
+        const query = await CustomerService.update(auth.user!.id, payload);
+        const result = query.toJSON();
+        result.role = IUserRoles.customer;
+
+        return result;
+      }
+
+      if (auth.name === 'provider') {
+        const query = await ProviderService.update(auth.user!.id, payload);
+        const result = query.toJSON();
+        result.role = IUserRoles.provider;
+
+        return result;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }
