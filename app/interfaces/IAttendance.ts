@@ -16,3 +16,12 @@ export interface IUpdateAttendance {
   attendanceDate?: DateTime;
   status?: string;
 }
+
+export interface IQueryFilters {
+  customer?: string;
+  phone?: string;
+  service?: string;
+  solicitationDate?: string;
+  attendanceDate?: string;
+  status?: string;
+}

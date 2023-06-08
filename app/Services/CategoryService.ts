@@ -15,13 +15,29 @@ export default class CategoryService {
     }
   }
 
-  static async show(id: string) {
+  static async show(id?: string, name?: string) {
     try {
-      const query = await Category.query().whereNull('deletedAt').where('id', id).first();
+      if (id) {
+        const query = await Category.query()
+          .whereNull('deletedAt')
+          .where('id', id)
+          .first();
 
-      if (!query) throw AppError.E_NOT_FOUND();
+        if (!query) throw AppError.E_NOT_FOUND();
 
-      return query;
+        return query;
+      }
+
+      if (name) {
+        const query = await Category.query()
+          .whereNull('deletedAt')
+          .where('name', 'like', `%${name}%`)
+          .first();
+
+        if (!query) throw AppError.E_NOT_FOUND();
+
+        return query;
+      }
     } catch (error) {
       throw error;
     }

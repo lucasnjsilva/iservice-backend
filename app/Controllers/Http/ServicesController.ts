@@ -7,11 +7,12 @@ import UpdateServiceValidator from 'App/Validators/UpdateServiceValidator';
 import { type IQueryFilters } from 'App/interfaces/IService';
 
 export default class ServicesController {
-  public async index({ request, response }: HttpContextContract) {
+  public async index({ request, response, auth }: HttpContextContract) {
     try {
       const { page } = request.qs();
       const filters = request.qs() as IQueryFilters;
-      const result = await ServicesService.index(page, filters);
+      const userId = filters.my_services ? auth.user!.id : null;
+      const result = await ServicesService.index(page, filters, userId);
 
       return Response.Pagination(response, result);
     } catch (error) {

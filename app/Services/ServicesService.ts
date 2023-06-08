@@ -9,7 +9,7 @@ import { DateTime } from 'luxon';
 import CategoryService from './CategoryService';
 
 export default class ServicesService {
-  static async index(page: number = 1, filters: IQueryFilters) {
+  static async index(page: number = 1, filters: IQueryFilters, userId: string | null) {
     try {
       const limit = 20;
       const query = Service.query()
@@ -34,6 +34,14 @@ export default class ServicesService {
 
       if (filters.city) {
         query.where('providers.city', filters.city);
+      }
+
+      if (filters.user) {
+        query.where('services.provider_id', filters.user);
+      }
+
+      if (userId) {
+        query.where('services.provider_id', userId);
       }
 
       return await query.paginate(page, limit);
@@ -61,11 +69,15 @@ export default class ServicesService {
 
   static async create(payload: ICreateService, providerId: string) {
     try {
-      const category = await CategoryService.show(payload.categoryId);
+      const category = await CategoryService.show(undefined, payload.category);
 
       if (!category) throw AppError.E_GENERIC_ERROR('Category not found.');
 
-      const query = await Service.create({ ...payload, providerId });
+      const query = await Service.create({
+        ...payload,
+        categoryId: category.id,
+        providerId,
+      });
 
       return query;
     } catch (error) {
@@ -75,10 +87,13 @@ export default class ServicesService {
 
   static async update(payload: IUpdateService, id: string, providerId: string) {
     try {
-      if (payload.categoryId) {
-        const category = await CategoryService.show(payload.categoryId);
+      let categoryId: string = '';
+      if (payload.category) {
+        const category = await CategoryService.show(undefined, payload.category);
 
         if (!category) throw AppError.E_GENERIC_ERROR('Category not found.');
+
+        categoryId = category.id;
       }
 
       const query = await Service.query()
@@ -89,7 +104,12 @@ export default class ServicesService {
 
       if (!query) throw AppError.E_NOT_FOUND();
 
-      await query.merge(payload).save();
+      await query
+        .merge({
+          ...payload,
+          categoryId: categoryId ?? '',
+        })
+        .save();
 
       return query;
     } catch (error) {

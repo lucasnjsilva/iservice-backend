@@ -7,10 +7,35 @@ import UpdateAttendanceValidator from 'App/Validators/UpdateAttendanceValidator'
 export default class AttendancesController {
   public async index({ request, response, auth }: HttpContextContract) {
     try {
-      const { page, limit } = request.qs();
+      const {
+        page,
+        limit,
+        customer,
+        phone,
+        service,
+        solicitationDate,
+        attendanceDate,
+        status,
+      } = request.qs();
+
       const userId = auth.user!.id;
       const userType = auth.name;
-      const result = await AttendanceService.index(page, userId, userType, Number(limit));
+      const filters = {
+        customer,
+        phone,
+        service,
+        solicitationDate,
+        attendanceDate,
+        status,
+      };
+
+      const result = await AttendanceService.index(
+        page,
+        userId,
+        userType,
+        limit,
+        filters
+      );
 
       return Response.Pagination(response, result);
     } catch (error) {
