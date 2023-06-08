@@ -8,6 +8,7 @@ import {
 import { DateTime } from 'luxon';
 import { cuid } from '@ioc:Adonis/Core/Helpers';
 import Drive from '@ioc:Adonis/Core/Drive';
+import Hash from '@ioc:Adonis/Core/Hash';
 
 export default class ProviderService {
   static async index(page: number = 1, filters: IQueryFilters) {
@@ -199,6 +200,24 @@ export default class ProviderService {
       await provider.delete();
 
       return provider;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async changePassword(id: string, oldPassword: string, newPassword: string) {
+    try {
+      const query = await Provider.query().whereNull('deletedAt').where('id', id).first();
+
+      if (!query) throw AppError.E_NOT_FOUND();
+
+      if (!(await Hash.verify(query.password, oldPassword))) {
+        throw AppError.E_GENERIC_ERROR('Invalid old password.');
+      }
+
+      await query.merge({ password: newPassword }).save();
+
+      return query;
     } catch (error) {
       throw error;
     }

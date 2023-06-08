@@ -101,4 +101,42 @@ export default class SessionService {
       throw error;
     }
   }
+
+  static async changePassword(auth: AuthContract, oldPass: string, newPass: string) {
+    try {
+      if (auth.name === 'admin') {
+        const query = await AdminService.changePassword(auth.user!.id, oldPass, newPass);
+        const result = query.toJSON();
+        result.role = IUserRoles.admin;
+
+        return result;
+      }
+
+      if (auth.name === 'customer') {
+        const query = await CustomerService.changePassword(
+          auth.user!.id,
+          oldPass,
+          newPass
+        );
+        const result = query.toJSON();
+        result.role = IUserRoles.customer;
+
+        return result;
+      }
+
+      if (auth.name === 'provider') {
+        const query = await ProviderService.changePassword(
+          auth.user!.id,
+          oldPass,
+          newPass
+        );
+        const result = query.toJSON();
+        result.role = IUserRoles.provider;
+
+        return result;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }

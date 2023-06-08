@@ -62,4 +62,15 @@ export default class SessionsController {
       return Response.Error(response, error);
     }
   }
+
+  public async changePassword({ auth, request, response }: HttpContextContract) {
+    try {
+      const { oldPassword, newPassword } = request.body();
+      const user = await SessionService.changePassword(auth, oldPassword, newPassword);
+
+      return Response.Success(response, user);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
 }

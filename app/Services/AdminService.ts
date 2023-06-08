@@ -2,6 +2,7 @@ import AppError from 'App/Helpers/AppError';
 import Admin from 'App/Models/Admin';
 import { type ICreateAdmin, type IUpdateAdmin } from 'App/interfaces/IAdmin';
 import { DateTime } from 'luxon';
+import Hash from '@ioc:Adonis/Core/Hash';
 
 export default class AdminService {
   static async index(page: number = 1) {
@@ -105,6 +106,24 @@ export default class AdminService {
       if (!query) throw AppError.E_NOT_FOUND();
 
       await query.delete();
+
+      return query;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async changePassword(id: string, oldPassword: string, newPassword: string) {
+    try {
+      const query = await Admin.query().whereNull('deletedAt').where('id', id).first();
+
+      if (!query) throw AppError.E_NOT_FOUND();
+
+      if (!(await Hash.verify(query.password, oldPassword))) {
+        throw AppError.E_GENERIC_ERROR('Invalid old password.');
+      }
+
+      await query.merge({ password: newPassword }).save();
 
       return query;
     } catch (error) {
