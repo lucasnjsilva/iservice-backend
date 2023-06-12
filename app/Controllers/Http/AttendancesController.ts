@@ -10,6 +10,7 @@ export default class AttendancesController {
       const {
         page,
         limit,
+        provider,
         customer,
         phone,
         service,
@@ -21,6 +22,7 @@ export default class AttendancesController {
       const userId = auth.user!.id;
       const userType = auth.name;
       const filters = {
+        provider,
         customer,
         phone,
         service,

@@ -30,7 +30,7 @@ export default class ForgotPasswordService {
       if (!model) throw AppError.E_GENERIC_ERROR('User type not found.');
 
       const token = await ForgotPassword.generateToken(model);
-      const link = `${Env.get('DOMAIN')}/users/password/reset?token=${token}`;
+      const link = `${Env.get('DOMAIN_FRONT')}/forgot_password/reset?token=${token}`;
       const html = await View.render('ForgotPassword.index', { link });
 
       await ForgotPassword.changeStatus(token, ForgotPasswordStatus.PENDING);

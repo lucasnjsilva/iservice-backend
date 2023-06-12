@@ -21,7 +21,8 @@ export default class AttendanceService {
         .select('attendances.*')
         .join('services', 'attendances.service_id', 'services.id')
         .join('customers', 'attendances.customer_id', 'customers.id')
-        .preload('service', async (q) => await q.preload('category'))
+        .join('providers', 'services.provider_id', 'providers.id')
+        .preload('service', async (q) => await q.preload('category').preload('provider'))
         .preload('customer')
         .whereNull('attendances.deleted_at');
 
@@ -31,6 +32,36 @@ export default class AttendanceService {
 
       if (userType === 'provider') {
         query.where('services.provider_id', userId);
+
+        if (filters.customer) {
+          query.where('customers.name', 'like', `%${decodeURI(filters.customer)}%`);
+        }
+
+        if (filters.phone) {
+          query.where('customers.phone', 'like', `%${decodeURI(filters.phone)}%`);
+        }
+
+        if (filters.service) {
+          query.where('services.name', 'like', `%${decodeURI(filters.service)}%`);
+        }
+
+        if (filters.solicitationDate) {
+          query.where('attendances.solicitation_date', `${filters.solicitationDate}`);
+        }
+
+        if (filters.attendanceDate) {
+          query.where('attendances.attendance_date', `${filters.attendanceDate}`);
+        }
+
+        if (filters.status) {
+          query.where('attendances.status', `${AttendanceStatus[filters.status]}`);
+        }
+      }
+
+      if (userType === 'admin') {
+        if (filters.provider) {
+          query.where('providers.name', 'like', `%${decodeURI(filters.provider)}%`);
+        }
 
         if (filters.customer) {
           query.where('customers.name', 'like', `%${decodeURI(filters.customer)}%`);

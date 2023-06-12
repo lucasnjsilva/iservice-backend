@@ -18,6 +18,7 @@ export interface IUpdateAttendance {
 }
 
 export interface IQueryFilters {
+  provider?: string;
   customer?: string;
   phone?: string;
   service?: string;

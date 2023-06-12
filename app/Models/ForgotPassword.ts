@@ -83,6 +83,7 @@ export default class ForgotPassword extends BaseModel {
       .whereNotNull(modelId)
       .where('expiresAt', '>', DateTime.now().toSQL())
       .where('token', token)
+      .where('status', 'EMAIL_SENT')
       .first();
 
     return !!result;
