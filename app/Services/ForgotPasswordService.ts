@@ -31,7 +31,7 @@ export default class ForgotPasswordService {
 
       const token = await ForgotPassword.generateToken(model);
       const link = `${Env.get('DOMAIN_FRONT')}/forgot_password/reset?token=${token}`;
-      const html = await View.render('ForgotPassword.index', { link });
+      const html = await View.render('ForgotPassword/index', { link });
 
       await ForgotPassword.changeStatus(token, ForgotPasswordStatus.PENDING);
 
