@@ -35,7 +35,7 @@ export default class ProviderService {
 
         if (value !== undefined && value !== '') {
           if (validFilters.includes(key as keyof IQueryFilters)) {
-            query.where(key, value);
+            query.where(key, 'like', `%${value}%`);
           }
         }
       });
