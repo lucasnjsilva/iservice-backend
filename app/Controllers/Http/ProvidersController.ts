@@ -87,6 +87,18 @@ export default class ProvidersController {
     }
   }
 
+  public async changePassword({ request, response, params }: HttpContextContract) {
+    try {
+      const { id } = params;
+      const { oldPassword, newPassword } = request.body();
+      const user = await ProviderService.changePassword(id, oldPassword, newPassword);
+
+      return Response.Success(response, user);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
+
   public async total({ response }: HttpContextContract) {
     try {
       const result = await ProviderService.total();

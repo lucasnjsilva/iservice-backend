@@ -18,3 +18,7 @@ Route.group(() => {
   Route.patch('/customers/restore/:id', 'CustomersController.restore');
   Route.delete('/customers/:id', 'CustomersController.destroy');
 }).middleware(['auth', 'customerPermission']);
+
+Route.group(() => {
+  Route.put('/customers/password/:id', 'CustomersController.changePassword');
+}).middleware(['auth', 'adminPermission']);

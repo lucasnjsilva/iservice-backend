@@ -1,16 +1,29 @@
 import AppError from 'App/Helpers/AppError';
 import Customer from 'App/Models/Customer';
-import { type IUpdateCustomer, type ICreateCustomer } from 'App/interfaces/ICustomer';
+import {
+  type IUpdateCustomer,
+  type ICreateCustomer,
+  type IQueryFilters,
+} from 'App/interfaces/ICustomer';
 import { DateTime } from 'luxon';
 import Hash from '@ioc:Adonis/Core/Hash';
 
 export default class CustomerService {
-  static async index(page: number = 1) {
+  static async index(page: number = 1, filters: IQueryFilters) {
     try {
       const limit = 20;
-      const query = await Customer.query().whereNull('deletedAt').paginate(page, limit);
+      const validFilters: Array<keyof IQueryFilters> = ['name', 'email', 'phone', 'cpf'];
 
-      return query;
+      const query = Customer.query().whereNull('deletedAt');
+
+      Object.keys(filters).forEach((key) => {
+        const value = filters[key];
+        if (value !== undefined && validFilters.includes(key as keyof IQueryFilters)) {
+          query.where(key, 'like', `%${value}%`);
+        }
+      });
+
+      return await query.paginate(page, limit);
     } catch (error) {
       throw error;
     }

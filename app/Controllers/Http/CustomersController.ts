@@ -3,12 +3,14 @@ import Response from 'App/Helpers/Response';
 import CustomerService from 'App/Services/CustomerService';
 import CreateCustomerValidator from 'App/Validators/CreateCustomerValidator';
 import UpdateCustomerValidator from 'App/Validators/UpdateCustomerValidator';
+import { type IQueryFilters } from 'App/interfaces/ICustomer';
 
 export default class CustomersController {
   public async index({ request, response }: HttpContextContract) {
     try {
       const { page } = request.qs();
-      const customers = await CustomerService.index(page);
+      const filters = request.qs() as IQueryFilters;
+      const customers = await CustomerService.index(page, filters);
 
       return Response.Pagination(response, customers);
     } catch (error) {
@@ -78,6 +80,18 @@ export default class CustomersController {
       const customer = await CustomerService.destroy(id);
 
       return Response.Success(response, customer);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
+
+  public async changePassword({ request, response, params }: HttpContextContract) {
+    try {
+      const { id } = params;
+      const { oldPassword, newPassword } = request.body();
+      const user = await CustomerService.changePassword(id, oldPassword, newPassword);
+
+      return Response.Success(response, user);
     } catch (error) {
       return Response.Error(response, error);
     }

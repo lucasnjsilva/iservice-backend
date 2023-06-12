@@ -17,3 +17,7 @@ Route.group(() => {
   Route.patch('/providers/restore/:id', 'ProvidersController.restore');
   Route.delete('/providers/:id', 'ProvidersController.destroy');
 }).middleware(['auth', 'providerPermission']);
+
+Route.group(() => {
+  Route.put('/providers/password/:id', 'ProvidersController.changePassword');
+}).middleware(['auth', 'adminPermission']);

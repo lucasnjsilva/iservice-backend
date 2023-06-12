@@ -10,3 +10,7 @@ Route.group(() => {
   Route.patch('/admins/restore/:id', 'AdminsController.restore');
   Route.delete('/admins/:id', 'AdminsController.destroy');
 }).middleware(['auth', 'adminPermission']);
+
+Route.group(() => {
+  Route.put('/admins/password/:id', 'AdminsController.changePassword');
+}).middleware(['auth', 'adminPermission']);

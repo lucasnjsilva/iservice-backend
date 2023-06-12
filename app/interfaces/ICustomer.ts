@@ -13,3 +13,10 @@ export interface IUpdateCustomer {
   phone?: string;
   cpf?: string;
 }
+
+export interface IQueryFilters {
+  name?: string;
+  email?: string;
+  cpf?: string;
+  phone?: string;
+}

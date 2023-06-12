@@ -82,4 +82,16 @@ export default class AdminsController {
       return Response.Error(response, error);
     }
   }
+
+  public async changePassword({ request, response, params }: HttpContextContract) {
+    try {
+      const { id } = params;
+      const { oldPassword, newPassword } = request.body();
+      const user = await AdminService.changePassword(id, oldPassword, newPassword);
+
+      return Response.Success(response, user);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
 }
