@@ -111,4 +111,14 @@ export default class CategoryService {
       throw error;
     }
   }
+
+  static async total() {
+    try {
+      const query = await Category.query().whereNull('deletedAt').count('* as total');
+
+      return { total: query[0].$extras.total };
+    } catch (error) {
+      throw error;
+    }
+  }
 }

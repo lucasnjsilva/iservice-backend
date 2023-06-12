@@ -82,4 +82,14 @@ export default class CustomersController {
       return Response.Error(response, error);
     }
   }
+
+  public async total({ response }: HttpContextContract) {
+    try {
+      const result = await CustomerService.total();
+
+      return Response.Success(response, result);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
 }

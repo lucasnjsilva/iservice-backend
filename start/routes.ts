@@ -8,3 +8,4 @@ import './routes/attendance.routes';
 import './routes/evaluation.routes';
 import './routes/forgotPassword.routes';
 import './routes/categories.routes';
+import './routes/dashboard.routes';

@@ -237,6 +237,16 @@ export default class AttendanceService {
     }
   }
 
+  static async total() {
+    try {
+      const query = await Attendance.query().whereNull('deletedAt').count('* as total');
+
+      return { total: query[0].$extras.total };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async topContractedServices() {
     try {
       const query = Attendance.query()

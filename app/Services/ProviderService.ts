@@ -222,4 +222,14 @@ export default class ProviderService {
       throw error;
     }
   }
+
+  static async total() {
+    try {
+      const query = await Provider.query().whereNull('deletedAt').count('* as total');
+
+      return { total: query[0].$extras.total };
+    } catch (error) {
+      throw error;
+    }
+  }
 }

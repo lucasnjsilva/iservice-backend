@@ -134,4 +134,14 @@ export default class CustomerService {
       throw error;
     }
   }
+
+  static async total() {
+    try {
+      const query = await Customer.query().whereNull('deletedAt').count('* as total');
+
+      return { total: query[0].$extras.total };
+    } catch (error) {
+      throw error;
+    }
+  }
 }

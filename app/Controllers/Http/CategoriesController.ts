@@ -82,4 +82,14 @@ export default class CategoriesController {
       return Response.Error(response, error);
     }
   }
+
+  public async total({ response }: HttpContextContract) {
+    try {
+      const result = await CategoryService.total();
+
+      return Response.Success(response, result);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
 }

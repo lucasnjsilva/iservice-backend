@@ -86,4 +86,14 @@ export default class ProvidersController {
       return Response.Error(response, error);
     }
   }
+
+  public async total({ response }: HttpContextContract) {
+    try {
+      const result = await ProviderService.total();
+
+      return Response.Success(response, result);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
 }

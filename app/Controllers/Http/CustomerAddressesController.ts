@@ -46,7 +46,7 @@ export default class CustomerAddressesController {
       const { id } = params;
       const customerId = auth.user!.id;
       const payload = await request.validate(UpdateCustomerAddressValidator);
-      const result = await CustomerAddressService.update(payload, customerId, id);
+      const result = await CustomerAddressService.update(payload, id, customerId);
 
       return Response.Success(response, result);
     } catch (error) {
