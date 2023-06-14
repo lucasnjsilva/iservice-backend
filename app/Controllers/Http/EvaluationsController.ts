@@ -87,4 +87,15 @@ export default class EvaluationsController {
       return Response.Error(response, error);
     }
   }
+
+  public async searchForAttendanceId({ response, params }: HttpContextContract) {
+    try {
+      const { id } = params;
+      const result = await EvaluationService.searchForAttendanceId(id);
+
+      return Response.Success(response, result);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
 }

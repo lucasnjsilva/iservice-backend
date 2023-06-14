@@ -11,6 +11,7 @@ Route.group(() => {}).middleware('auth');
 
 // Rotas privadas
 Route.group(() => {
+  Route.get('/evaluations/search/:id', 'EvaluationsController.searchForAttendanceId');
   Route.post('/evaluations', 'EvaluationsController.create');
   Route.put('/evaluations/:id', 'EvaluationsController.update');
   Route.patch('/evaluations/delete/:id', 'EvaluationsController.delete');

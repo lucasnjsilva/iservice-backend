@@ -130,4 +130,19 @@ export default class EvaluationService {
       throw error;
     }
   }
+
+  static async searchForAttendanceId(id: string) {
+    try {
+      const query = await Evaluation.query()
+        .whereNull('deletedAt')
+        .where('attendanceId', id)
+        .first();
+
+      if (!query) throw AppError.E_NOT_FOUND();
+
+      return query;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
