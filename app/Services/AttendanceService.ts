@@ -103,6 +103,7 @@ export default class AttendanceService {
         .join('services', 'attendances.service_id', 'services.id')
         .preload('service', async (service) => await service.preload('provider'))
         .preload('customer', async (customer) => await customer.preload('address'))
+        .preload('address')
         .whereNull('attendances.deleted_at')
         .where('attendances.id', id);
 
