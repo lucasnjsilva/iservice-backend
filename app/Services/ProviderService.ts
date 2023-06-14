@@ -232,4 +232,23 @@ export default class ProviderService {
       throw error;
     }
   }
+
+  static async deleteProfileImage(id: string) {
+    try {
+      const provider = await Provider.query()
+        .whereNull('deletedAt')
+        .where('id', id)
+        .first();
+
+      if (!provider) throw AppError.E_NOT_FOUND();
+
+      const currentFilename = provider.profileImage;
+      await Drive.delete(`profile_images/${currentFilename}`);
+      await provider.merge({ profileImage: '' }).save();
+
+      return provider;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

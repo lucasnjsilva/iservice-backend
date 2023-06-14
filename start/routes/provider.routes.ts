@@ -15,6 +15,10 @@ Route.group(() => {
   Route.put('/providers/:id', 'ProvidersController.update');
   Route.patch('/providers/delete/:id', 'ProvidersController.delete');
   Route.patch('/providers/restore/:id', 'ProvidersController.restore');
+  Route.patch(
+    '/providers/profile_image/delete',
+    'ProvidersController.deleteProfileImage'
+  );
   Route.delete('/providers/:id', 'ProvidersController.destroy');
 }).middleware(['auth', 'providerPermission']);
 

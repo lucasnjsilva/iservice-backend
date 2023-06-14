@@ -46,6 +46,7 @@ export default class ProvidersController {
       const { id } = params;
       const payload = await request.validate(UpdateProviderValidator);
       const profileImage = request.file('profileImage');
+
       const customer = await ProviderService.update(id, { ...payload, profileImage });
 
       return Response.Success(response, customer);
@@ -104,6 +105,17 @@ export default class ProvidersController {
       const result = await ProviderService.total();
 
       return Response.Success(response, result);
+    } catch (error) {
+      return Response.Error(response, error);
+    }
+  }
+
+  public async deleteProfileImage({ response, auth }: HttpContextContract) {
+    try {
+      const id = auth.user!.id;
+      const customer = await ProviderService.deleteProfileImage(id);
+
+      return Response.Success(response, customer);
     } catch (error) {
       return Response.Error(response, error);
     }
