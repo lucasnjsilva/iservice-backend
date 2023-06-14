@@ -10,11 +10,13 @@ export enum AttendanceStatus {
 export interface ICreateAttendance {
   serviceId: string;
   attendanceDate: DateTime;
+  addressId: string;
 }
 
 export interface IUpdateAttendance {
   attendanceDate?: DateTime;
   status?: string;
+  addressId?: string;
 }
 
 export interface IQueryFilters {

@@ -328,7 +328,7 @@ export default class AttendanceService {
     try {
       const limit = 10;
       const query = await Attendance.query()
-        .preload('evaluations')
+        .preload('evaluations', (q) => q.whereNull('deletedAt'))
         .preload('customer')
         .whereNull('deletedAt')
         .where('serviceId', serviceId)

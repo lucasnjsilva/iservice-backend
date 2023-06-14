@@ -6,6 +6,7 @@ export default class UpdateAttendanceValidator {
 
   public schema = schema.create({
     attendanceDate: schema.date.optional(),
+    addressId: schema.string.optional(),
     status: schema.enum.optional([
       'CANCELED_BY_CUSTOMER',
       'CANCELED_BY_PROVIDER',

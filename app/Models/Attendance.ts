@@ -12,6 +12,7 @@ import Service from './Service';
 import Customer from './Customer';
 import { v4 as uuidv4 } from 'uuid';
 import Evaluation from './Evaluation';
+import CustomerAddress from './CustomerAddress';
 
 export default class Attendance extends BaseModel {
   @column({ isPrimary: true })
@@ -40,6 +41,12 @@ export default class Attendance extends BaseModel {
 
   @hasMany(() => Evaluation, { foreignKey: 'attendanceId' })
   public evaluations: HasMany<typeof Evaluation>;
+
+  @column()
+  public addressId: string;
+
+  @belongsTo(() => CustomerAddress, { foreignKey: 'addressId' })
+  public address: BelongsTo<typeof CustomerAddress>;
 
   @column.dateTime({ serializeAs: null, autoCreate: true })
   public createdAt: DateTime;

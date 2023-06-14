@@ -7,6 +7,7 @@ export default class CreateAttendanceValidator {
   public schema = schema.create({
     serviceId: schema.string({}, [rules.required()]),
     attendanceDate: schema.date({}, [rules.required()]),
+    addressId: schema.string({}, [rules.required()]),
   });
 
   public messages: CustomMessages = {
