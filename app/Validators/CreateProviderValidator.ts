@@ -10,10 +10,7 @@ export default class CreateProviderValidator {
     name: schema.string({}, [rules.required()]),
     aboutMe: schema.string.optional(),
     phone: schema.string({}, [rules.required()]),
-    cnpj: schema.string({}, [
-      rules.required(),
-      rules.unique({ table: 'providers', column: 'cnpj' }),
-    ]),
+    cnpj: schema.string({}, [rules.required(), rules.cnpj()]),
     profileImage: schema.file.optional({ size: '2mb', extnames: ['jpg', 'jpeg', 'png'] }),
     address: schema.string({}, [rules.required()]),
     number: schema.string.optional(),

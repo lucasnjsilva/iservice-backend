@@ -45,14 +45,25 @@ export default class CustomerService {
 
   static async create(payload: ICreateCustomer) {
     try {
-      const { email } = payload;
-      const customerExists = await Customer.query()
+      const { email, cpf } = payload;
+      const emailExists = await Customer.query()
         .whereNull('deletedAt')
         .where('email', email)
         .first();
 
-      if (customerExists)
+      if (emailExists) {
         throw AppError.E_GENERIC_ERROR("The customer's e-mail is already registered.");
+      }
+
+      const cpfCleaned = cpf.replaceAll('.', '').replace('-', '');
+      const cpfExists = await Customer.query()
+        .whereNull('deletedAt')
+        .where('cpf', cpfCleaned)
+        .first();
+
+      if (cpfExists) {
+        throw AppError.E_GENERIC_ERROR("The customer's CPF is already registered.");
+      }
 
       const query = await Customer.create(payload);
 
